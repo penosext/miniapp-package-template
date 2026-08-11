@@ -9,4 +9,5 @@ dist/
 *.o
 *.amr
 *.tsbuildinfo
-
+pnpm-lock.yaml
+pnpm-workspace.yaml
