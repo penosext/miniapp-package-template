@@ -1,0 +1,30 @@
+{
+  "name": "@penosext/miniapp-package-name",
+  "version": "0.1.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "description": "A Miniapp native package",
+  "type": "module",
+  "main": "generated/ts/index.ts",
+  "types": "generated/ts/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./generated/ts/index.d.ts",
+      "import": "./generated/ts/index.ts"
+    }
+  },
+  "scripts": {
+    "generate": "miniapp-codegen --manifest miniapp.package.json --out generated"
+  },
+  "devDependencies": {
+    "@penosext/miniapp-codegen": "^0.1.0"
+  },
+  "files": [
+    "README.md",
+    "contract",
+    "generated",
+    "native",
+    "miniapp.package.json",
+    "package.json"
+  ]
+}

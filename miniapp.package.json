@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "runtimeApi": ">=1.0.0 <2.0.0",
+  "module": "example",
+  "contract": "contract/example.tsp",
+  "dependencies": ["@penosext/miniapp-runtime"],
+  "native": {
+    "language": "cpp",
+    "exports": ["Example"],
+    "cmake": "native/cpp/CMakeLists.txt"
+  },
+  "permissions": [],
+  "supportedPlatforms": ["*"]
+}

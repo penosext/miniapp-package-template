@@ -1,0 +1,12 @@
+node_modules/
+generated/
+dist/
+.miniapp/
+*.log
+*.db
+*.so
+*.a
+*.o
+*.amr
+*.tsbuildinfo
+

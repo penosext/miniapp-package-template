@@ -1,0 +1,47 @@
+name: Publish Package
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://npm.pkg.github.com
+          scope: '@penosext'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+      - name: Generate package bindings
+        run: pnpm install --no-frozen-lockfile && pnpm generate
+      - name: Publish package when the version is new
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          package_name="$(node -p "require('./package.json').name")"
+          package_version="$(node -p "require('./package.json').version")"
+          if pnpm view "${package_name}@${package_version}" version --registry https://npm.pkg.github.com >/dev/null 2>&1; then
+            echo "${package_name}@${package_version} is already published"
+            exit 0
+          fi
+          staging="$(mktemp -d)"
+          trap 'rm -rf "${staging}"' EXIT
+          cp -R . "${staging}/package"
+          STAGING="${staging}" node --input-type=module <<'NODE'
+          import { readFile, writeFile } from 'node:fs/promises';
+          const path = `${process.env.STAGING}/package/package.json`;
+          const manifest = JSON.parse(await readFile(path, 'utf8'));
+          delete manifest.private;
+          await writeFile(path, `${JSON.stringify(manifest, null, 2)}\n`);
+          NODE
+          pnpm --dir "${staging}/package" publish --no-git-checks --access restricted --registry https://npm.pkg.github.com
