@@ -10,6 +10,7 @@ permissions:
 
 jobs:
   publish:
+    if: github.repository != 'penosext/miniapp-package-template'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
