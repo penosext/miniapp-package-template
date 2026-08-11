@@ -22,15 +22,8 @@ jobs:
       - uses: pnpm/action-setup@v4
         with:
           version: 11
-      - name: Generate package bindings
-        run: |
-          set -euo pipefail
-          if node -e "const p=require('./package.json'); process.exit(p.scripts?.generate ? 0 : 1)"; then
-            pnpm install --no-frozen-lockfile
-            pnpm generate
-          else
-            echo 'No package generation script; publishing checked-in package sources'
-          fi
+      - name: Publish checked-in package artifacts
+        run: echo 'Publishing checked-in package sources and generated artifacts'
       - name: Publish package when the version is new
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
